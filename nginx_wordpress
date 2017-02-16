@@ -1,6 +1,7 @@
 server {
         listen   8080;
         server_name zrdn;
+	#client_max_body_size 12M;
 
     	sendfile off;
 

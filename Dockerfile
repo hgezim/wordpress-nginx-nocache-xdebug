@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y nginx php5-dev php5-mysql php5-fpm php5
 
 # Set up fpm error logging
 RUN sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php5/fpm/php.ini
+#RUN sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 12M/' /etc/php5/fpm/php.ini
 RUN sed -i 's/;php_admin_flag\[log_errors\] = on/;php_admin_flag\[log_errors\] = on/' /etc/php5/fpm/pool.d/www.conf
 RUN sed -i 's!;php_admin_value\[error_log\] = /var/log/fpm-php\.www\.log!php_admin_value\[error_log\] = /var/log/fpm-php\.www\.log!' /etc/php5/fpm/pool.d/www.conf
 
@@ -42,12 +43,18 @@ COPY ./supervisor_nginx.conf ./supervisor_fpm.conf ./supervisor_ftp.conf ./super
 
 
 # create wordpress db if it doesn't exist - actually, let's let this be created by mysql image
+
 # update config file 
 RUN sed -i "s/define('DB_NAME', 'database_name_here');/define('DB_NAME', 'wordpress');/"	/usr/share/nginx/html/wordpress/wp-config.php
 RUN sed -i "s/define('DB_USER', 'username_here');/define('DB_USER', 'root');/"	/usr/share/nginx/html/wordpress/wp-config.php
 RUN sed -i "s/define('DB_PASSWORD', 'password_here');/define('DB_PASSWORD', 'root');/"	/usr/share/nginx/html/wordpress/wp-config.php
 RUN sed -i "s/define('DB_HOST', 'localhost');/define('DB_HOST', 'db');/"	/usr/share/nginx/html/wordpress/wp-config.php
 RUN sed -i "s/define('WP_DEBUG', false);/define('WP_DEBUG', true);/"	/usr/share/nginx/html/wordpress/wp-config.php
+
+RUN { \
+	echo "define('WP_DEBUG_LOG', true);"; \
+	echo "define('WP_DEBUG_DISPLAY', TRUE);"; \
+} >> /usr/share/nginx/html/wordpress/wp-config.php
 
 # setup ftp
 RUN sed -i "s/anonymous_enable=NO/anonymous_enable=YES/" /etc/vsftpd.conf
