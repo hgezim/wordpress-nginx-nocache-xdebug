@@ -50,11 +50,8 @@ RUN sed -i "s/define('DB_USER', 'username_here');/define('DB_USER', 'root');/"	/
 RUN sed -i "s/define('DB_PASSWORD', 'password_here');/define('DB_PASSWORD', 'root');/"	/usr/share/nginx/html/wordpress/wp-config.php
 RUN sed -i "s/define('DB_HOST', 'localhost');/define('DB_HOST', 'db');/"	/usr/share/nginx/html/wordpress/wp-config.php
 RUN sed -i "s/define('WP_DEBUG', false);/define('WP_DEBUG', true);/"	/usr/share/nginx/html/wordpress/wp-config.php
-
-RUN { \
-	echo "define('WP_DEBUG_LOG', true);"; \
-	echo "define('WP_DEBUG_DISPLAY', TRUE);"; \
-} >> /usr/share/nginx/html/wordpress/wp-config.php
+RUN sed -i "81idefine('WP_DEBUG_LOG', true);" /usr/share/nginx/html/wordpress/wp-config.php
+RUN sed -i "82idefine('WP_DEBUG_DISPLAY', true);" /usr/share/nginx/html/wordpress/wp-config.php
 
 # setup ftp
 RUN sed -i "s/anonymous_enable=NO/anonymous_enable=YES/" /etc/vsftpd.conf
