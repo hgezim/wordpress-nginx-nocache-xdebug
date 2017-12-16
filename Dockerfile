@@ -33,6 +33,15 @@ RUN rm -rf latest.tar.gz
 RUN mkdir /usr/share/nginx/wp_tmp && cp -r wordpress/* /usr/share/nginx/wp_tmp/
 RUN cp /usr/share/nginx/wp_tmp/wp-config-sample.php /usr/share/nginx/wp_tmp/wp-config.php
 
+# We map ./working_files from host to /usr/share/nginx/html in container
+# run.sh checks if /usr/share/nginx/html/wordpress/ exists and creates it if it doesn't
+# run.sh then copies /usr/share/nginx/wp_tmp/* to /usr/share/nginx/html/wordpress/ 
+# So, this leaves us with wordpress code in host and container. Even if host deletes wordpress code, that's okay
+# Then we also map ./src (Zip Recipes source code) to /usr/share/nginx/html/wordpress/wp-content/plugins/zip-recipes
+# This seals the deal and we can make updates in host and container gets them for free. This way
+# zip-recipes/ lives outside wordpress dir in reality
+VOLUME /usr/share/nginx/html
+
 EXPOSE 8080
 
 RUN sudo chown -R www-data:www-data /usr/share/nginx/wp_tmp
