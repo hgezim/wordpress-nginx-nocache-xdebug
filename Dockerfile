@@ -2,7 +2,7 @@ FROM kdelfour/supervisor-docker
 LABEL Gezim Hoxha <hgezim@gmail.com>
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-RUN apt-get update && apt-get install -y nginx php5-dev php5-mysql php5-fpm php5-xdebug ccze vim links ssh curl
+RUN apt-get update && apt-get install -y nginx php5-dev php5-mysql php5-fpm php5-xdebug php5-imagick ccze vim links ssh curl
 
 # needs to be up here
 RUN usermod -u 1000 www-data
