@@ -18,6 +18,9 @@ RUN echo 'env[XDEBUG_CONFIG] = $XDEBUG_CONFIG' >> /etc/php5/fpm/pool.d/www.conf
 RUN touch /var/log/fpm-php.www.log
 RUN chown www-data.www-data /var/log/fpm-php.www.log
 
+RUN touch /var/log/xdebug_remote.log
+RUN chown www-data.www-data /var/log/xdebug_remote.log
+
 # Fix xdebug settings
 RUN { \
   echo 'zend_extension="/usr/lib/php5/20121212/xdebug.so"'; \
